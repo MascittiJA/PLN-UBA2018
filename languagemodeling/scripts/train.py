@@ -31,10 +31,14 @@ from languagemodeling.ngram import NGram
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
-
+    
     # load the data
     # WORK HERE!! LOAD YOUR TRAINING CORPUS
-    sents = gutenberg.sents(['austen-emma.txt', 'austen-sense.txt'])
+    import nltk
+    nltk.download('machado')
+    from nltk.corpus import machado
+    
+    sents = machado.sents('contos/macn001.txt')
 
     # train the model
     n = int(opts['-n'])

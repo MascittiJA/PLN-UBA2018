@@ -2,6 +2,12 @@
 from collections import defaultdict
 import math
 
+def agregarMarcadores(sent, n):
+    # Agregamos marcadores de comienzo y fin de oracion.
+    sent = ["<s>"]*(n-1) + sent + ["</s>"]
+
+    return sent
+
 
 class LanguageModel(object):
 
@@ -48,9 +54,15 @@ class NGram(LanguageModel):
         assert n > 0
         self._n = n
 
-        count = defaultdict(int)
+        self.counts = count = defaultdict(int)
 
         # WORK HERE!!
+        for sent in sents:
+            sent = agregarMarcadores(sent,n)
+            for i in range(len(sent) - n + 1):
+                ngram = tuple(sent[i:i+n])  # los diccionarios no pueden guardar listas, pero sí tuplas
+                count[ngram] += 1
+                counts[ngram[:-1]] += 1  # Todos menos el ultimo
 
         self._count = dict(count)
 
