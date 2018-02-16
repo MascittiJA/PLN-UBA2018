@@ -123,6 +123,14 @@ class NGram(LanguageModel):
 
         return sent
     
+def countWordTypes(sents):
+    word_types = ['</s>']
+    for sent in sents:
+        for token in sent:
+            if token not in word_types:
+                word_types.append(token)
+
+    return word_types
     
 class AddOneNGram(NGram):
 
@@ -137,18 +145,9 @@ class AddOneNGram(NGram):
         # compute vocabulary
         self._voc = voc = set()
         # WORK HERE!!
-        voc = self.countWordTypes(sents)
+        voc = countWordTypes(sents)
 
         self._V = len(voc)  # vocabulary size
-
-    def countWordTypes(self, sents):
-        word_types = ['</s>']
-        for sent in sents:
-            for token in sent:
-                if token not in word_types:
-                    word_types.append(token)
-
-        return word_types
 
     def V(self):
         """Size of the vocabulary.
@@ -200,6 +199,9 @@ class InterpolatedNGram(NGram):
         print('Computing counts...')
         # WORK HERE!!
         # COMPUTE COUNTS FOR ALL K-GRAMS WITH K <= N
+        
+        # Listas de modelos, para la interpolacion
+        self.models = self.getModels(n, sents, addone)
 
         # compute vocabulary size for add-one in the last step
         self._addone = addone
@@ -207,6 +209,7 @@ class InterpolatedNGram(NGram):
             print('Computing vocabulary...')
             self._voc = voc = set()
             # WORK HERE!!
+            voc = countWordTypes(sents)
 
             self._V = len(voc)
 
@@ -266,3 +269,24 @@ class InterpolatedNGram(NGram):
             cum_lambda += lambdaa
 
         return prob
+    
+    
+    def getModels(self, n, sents, is_addone):
+        """
+        Calcula la lista de modelos talque:
+                models = [1-grama, 2-grama, ... , n-grama]
+        n -- order of the model.
+        sents -- list of sentences, each one being a list of tokens.
+        addone -- whether to use addone smoothing.
+        """
+        models = []
+        if is_addone:
+            models.append(AddOneNGram(1, sents))
+        else:
+            models.append(NGram(1, sents))
+
+        for i in range(2, n+1):
+            # [2, 3, ..., n]
+            models.append(NGram(i, sents))
+
+        return models
