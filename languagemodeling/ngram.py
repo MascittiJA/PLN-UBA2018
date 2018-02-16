@@ -2,15 +2,8 @@
 from collections import defaultdict
 import math
 
-def agregarMarcadores(sent, n):
-    # Agregamos marcadores de comienzo y fin de oracion.
-    sent = ["<s>"]*(n-1) + sent + ["</s>"]
-
-    return sent
-
-
 class LanguageModel(object):
-
+    
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
 
@@ -54,16 +47,20 @@ class NGram(LanguageModel):
         assert n > 0
         self._n = n
 
-        self.counts = count = defaultdict(int)
+        count = defaultdict(int)
 
         # WORK HERE!!
         for sent in sents:
-            sent = agregarMarcadores(sent,n)
-            for i in range(len(sent) - n + 1):
+            sent = self.agregarMarcadores(sent)
+            final = len(sent) - n + 1
+            for i in range(final):
                 ngram = tuple(sent[i:i+n])  # los diccionarios no pueden guardar listas, pero sí tuplas
                 count[ngram] += 1
-                counts[ngram[:-1]] += 1  # Todos menos el ultimo
-
+                count[ngram[:-1]] += 1  # Todos menos el ultimo
+            
+            ngram = tuple(sent[final:])
+#            count[ngram] += 1
+            
         self._count = dict(count)
 
     def count(self, tokens):
@@ -79,14 +76,27 @@ class NGram(LanguageModel):
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
+        if prev_tokens is None:
+            prev_tokens = ()
         # WORK HERE!!
-
+        if self.count(prev_tokens) == 0:
+            return 0
+        else:
+            return self.count(prev_tokens + (token,)) / self.count(prev_tokens)
+        
+        
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
-
         sent -- the sentence as a list of tokens.
         """
         # WORK HERE!!
+        n = self._n
+        sent = self.agregarMarcadores(sent)
+        acum = 1
+        for i in range(n - 1, len(sent)):
+            acum *= self.cond_prob(sent[i], tuple(sent[i - n + 1:i]))
+            
+        return acum
 
     def sent_log_prob(self, sent):
         """Log-probability of a sentence.
@@ -94,3 +104,18 @@ class NGram(LanguageModel):
         sent -- the sentence as a list of tokens.
         """
         # WORK HERE!!
+        n = self._n
+        acum = 0
+        sent = self.agregarMarcadores(sent)
+        for i in range(n - 1, len(sent)):
+            cond_prob = self.cond_prob(sent[i], tuple(sent[i - n + 1:i]))
+            acum += math.log2(cond_prob) if cond_prob != 0 else - math.inf
+            
+        return acum
+
+    def agregarMarcadores(self,sent):
+        n = self._n
+        # Agregamos marcadores de comienzo y fin de oracion.
+        sent = ["<s>"]*(n-1) + sent + ["</s>"]
+
+        return sent

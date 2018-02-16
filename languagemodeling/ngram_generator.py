@@ -13,12 +13,27 @@ class NGramGenerator(object):
         # compute the probabilities
         probs = defaultdict(dict)
         # WORK HERE!!
+        for key in list(count.keys()):
+            prev_tokens = key[:-1]
+            token = key[-1:]
+        #    print(prev_tokens)
+        #    print(key)
+        #    print(count.get(key))
+        #    print(count.get(prev_tokens))
+            if len(key) == n:
+                probs[prev_tokens][token] = count.get(key)/count.get(prev_tokens)
 
         self._probs = dict(probs)
 
         # sort in descending order for efficient sampling
-        self._sorted_probs = sorted_probs = {}
+        self._sorted_probs = sorted_probs = defaultdict(list)
         # WORK HERE!!
+        for key in probs.keys():
+
+            l = list(probs.get(key).items())
+            l.sort(key=lambda x: x[1], reverse=True)
+        #    print(l)
+            sorted_probs[key] = l
 
     def generate_sent(self):
         """Randomly generate a sentence."""
@@ -29,6 +44,7 @@ class NGramGenerator(object):
         token = self.generate_token(tuple(prev_tokens))
         while token != '</s>':
             # WORK HERE!!
+            print('asd')
 
         return sent
 
