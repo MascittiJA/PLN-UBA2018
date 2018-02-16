@@ -58,7 +58,7 @@ class NGram(LanguageModel):
                 count[ngram] += 1
                 count[ngram[:-1]] += 1  # Todos menos el ultimo
             
-            ngram = tuple(sent[final:])
+            ngram = tuple(sent[final + 1:])
 #            count[ngram] += 1
             
         self._count = dict(count)
@@ -174,6 +174,8 @@ class AddOneNGram(NGram):
             count_tokens = self.count(tokens) + 1
             return count_tokens / count_prev_tokens
         
+        
+
 class InterpolatedNGram(NGram):
 
     def __init__(self, n, sents, gamma=None, addone=True):
@@ -278,7 +280,7 @@ class InterpolatedNGram(NGram):
         n -- order of the model.
         sents -- list of sentences, each one being a list of tokens.
         addone -- whether to use addone smoothing.
-        """
+        """         
         models = []
         if is_addone:
             models.append(AddOneNGram(1, sents))

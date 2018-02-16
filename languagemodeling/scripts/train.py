@@ -18,15 +18,15 @@ import pickle
 
 from nltk.corpus import gutenberg
 
-from languagemodeling.ngram import NGram
-# from languagemodeling.ngram import NGram, AddOneNGram, InterpolatedNGram
+#from languagemodeling.ngram import NGram
+from languagemodeling.ngram import NGram, AddOneNGram, InterpolatedNGram
 
 
-# models = {
-#     'ngram': NGram,
-#     'addone': AddOneNGram,
-#     'inter': InterpolatedNGram,
-# }
+models = {
+     'ngram': NGram,
+     'addone': AddOneNGram,
+     'inter': InterpolatedNGram,
+}
 
 
 if __name__ == '__main__':
@@ -39,12 +39,23 @@ if __name__ == '__main__':
     from nltk.corpus import machado
     
     sents = machado.sents('contos/macn001.txt')
+    # 90% training, 10% test
+    m = int(0.9 * len(sents))
+    train_sents = sents[:m]
+    test_sents = list(sents[m:])
+    
+    # save the test sents
+    test_filename = "test.txt"
+    # with open(test_filename, "wb") as test_file:
+    test_file = open(test_filename, "wb")
+    pickle.dump(test_sents, test_file)
+    test_file.close()
 
     # train the model
     n = int(opts['-n'])
-    model = NGram(n, sents)
-    # model_class = models[opts['-m']]
-    # model = model_class(n, sents)
+    #model = NGram(n, train_sents)
+    model_class = models[opts['-m']]
+    model = model_class(n, train_sents)
 
     # save it
     filename = opts['-o']
