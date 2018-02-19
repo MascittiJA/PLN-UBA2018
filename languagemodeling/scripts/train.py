@@ -38,7 +38,7 @@ if __name__ == '__main__':
     nltk.download('machado')
     from nltk.corpus import machado
     
-    sents = machado.sents('contos/macn001.txt')
+    sents = machado.sents()
     # 90% training, 10% test
     m = int(0.9 * len(sents))
     train_sents = sents[:m]
