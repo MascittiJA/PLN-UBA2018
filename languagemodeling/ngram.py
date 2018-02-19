@@ -201,9 +201,16 @@ class InterpolatedNGram(NGram):
         print('Computing counts...')
         # WORK HERE!!
         # COMPUTE COUNTS FOR ALL K-GRAMS WITH K <= N
-        
-        # Listas de modelos, para la interpolacion
-        self.models = self.getModels(n, sents, addone)
+        count = defaultdict(int)            
+        for sent in train_sents:
+            count[()] += len(sent) + 1
+            for k in range(1,n+1):
+                marked_sent = self.agregarMarcadores(sent)
+                for i in range(len(marked_sent)-k+1):
+                    ngram = tuple(marked_sent[i:i+k])
+                    count[ngram] += 1
+
+        self._count = dict(count)
 
         # compute vocabulary size for add-one in the last step
         self._addone = addone
@@ -240,6 +247,7 @@ class InterpolatedNGram(NGram):
         tokens -- the k-gram tuple.
         """
         # WORK HERE!! (JUST A RETURN STATEMENT)
+        return self._count.get(tokens, 0)
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -261,34 +269,21 @@ class InterpolatedNGram(NGram):
             # i-th term of the sum
             if i < n - 1:
                 # COMPUTE lambdaa AND cond_ml.
-                pass
+                tokens_count = self.count(tokens[:i+1])
+                prev_tokens_count = self.count(prev_tokens[i:])
+                lambdaa = (1-cum_lambda) * (tokens_count / (tokens_count + self._gamma)) 
+                cond_ml = (float(self.count(tokens[i:])) / prev_tokens_count) if prev_tokens_count != 0 else 0
             else:
                 # COMPUTE lambdaa AND cond_ml.
                 # LAST TERM: USE ADD ONE IF NEEDED!
-                pass
+                lambdaa = 1 - cum_lambda
+                prev_tokens_count = self.count(prev_tokens[i:])
+                if self._addone:
+                    cond_ml = (float(self.count(tokens[i:])) + 1) / (prev_tokens_count + self._V)
+                else:
+                    cond_ml = (float(self.count(tokens[i:])) / prev_tokens_count) if prev_tokens_count != 0 else 0
 
             prob += lambdaa * cond_ml
             cum_lambda += lambdaa
 
         return prob
-    
-    
-    def getModels(self, n, sents, is_addone):
-        """
-        Calcula la lista de modelos talque:
-                models = [1-grama, 2-grama, ... , n-grama]
-        n -- order of the model.
-        sents -- list of sentences, each one being a list of tokens.
-        addone -- whether to use addone smoothing.
-        """         
-        models = []
-        if is_addone:
-            models.append(AddOneNGram(1, sents))
-        else:
-            models.append(NGram(1, sents))
-
-        for i in range(2, n+1):
-            # [2, 3, ..., n]
-            models.append(NGram(i, sents))
-
-        return models
