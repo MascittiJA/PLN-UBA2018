@@ -132,6 +132,7 @@ def countWordTypes(sents):
 
     return word_types
     
+
 class AddOneNGram(NGram):
 
     def __init__(self, n, sents):
@@ -175,7 +176,6 @@ class AddOneNGram(NGram):
             return count_tokens / count_prev_tokens
         
         
-
 class InterpolatedNGram(NGram):
 
     def __init__(self, n, sents, gamma=None, addone=True):
@@ -251,6 +251,12 @@ class InterpolatedNGram(NGram):
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
+        tokens -- the k-gram tuple.
+        """
+        # WORK HERE!! (JUST A RETURN STATEMENT)
+
+    def cond_prob(self, token, prev_tokens=None):
+        """Conditional probability of a token.
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
@@ -282,6 +288,8 @@ class InterpolatedNGram(NGram):
                     cond_ml = (float(self.count(tokens[i:])) + 1) / (prev_tokens_count + self._V)
                 else:
                     cond_ml = (float(self.count(tokens[i:])) / prev_tokens_count) if prev_tokens_count != 0 else 0
+                pass
+
 
             prob += lambdaa * cond_ml
             cum_lambda += lambdaa
