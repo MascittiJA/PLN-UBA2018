@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     # train the model
     model_class = models[opts['-m']]
-    model = model_class(sents)
+#    model = model_class(sents)
 
     # USEFUL FOR MODELS WITH PARAMETERS:
     if opts['-n']:

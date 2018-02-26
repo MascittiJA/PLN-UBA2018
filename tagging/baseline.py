@@ -30,6 +30,8 @@ class BadBaselineTagger:
         """
         return True
 
+def inner_default_dict():
+    return defaultdict(int)
 
 class BaselineTagger:
 
@@ -41,16 +43,18 @@ class BaselineTagger:
         # WORK HERE!!
         self.default_tag = default_tag
         
-        self.word_tag_count_dict = word_tag_count_dict = defaultdict(lambda: defaultdict(int))
+
+        self.word_tag_count_dict = word_tag_count_dict = defaultdict(inner_default_dict)
         
         for sent in tagged_sents:
             for word, tag in sent:
                 word_tag_count_dict [word][tag] += 1
-
+        
         self.word_mostFrecTag_dict = word_mostFrecTag_dict = defaultdict(str)
         for word, tags in word_tag_count_dict.items():
             tag = max(tags.items(), key=lambda x: x[1])[0]
             word_mostFrecTag_dict[word] = tag
+        
 
     def tag(self, sent):
         """Tag a sentence.

@@ -31,7 +31,10 @@ class POSStats:
         self.word_tags_dict = word_tags_dict = word_tags_dict = defaultdict(set)
         self.tag_words_dict = tag_words_dict = defaultdict(set)
         
+        self.count_sents = 0
+        
         for sent in tagged_sents:
+            self.count_sents += 1
             for word, tag in sent:
                 # contar la palabra:
                 words_dict[word] += 1 #Cuento repeticiones de palabras
@@ -43,7 +46,6 @@ class POSStats:
                 word_tags_dict[word].add(tag)
                 tag_words_dict[tag].add(word)
         
-        self.count_sents = len(tagged_sents)
         self.count_words = len(words_dict)  # Cantidad de palabras (word types)
         self.count_tags = count_tags = len(tags_dict)  # Cantidad de tags
 

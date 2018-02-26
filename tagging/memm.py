@@ -31,15 +31,16 @@ class MEMM:
         
         self.n = n
         
+        basic_features = [word_lower, prev_tags, word_istitle, word_isupper, word_isdigit]
+        features = basic_features + [NPrevTags(i) for i in range(1,n)] + [cf(f) for f in basic_features for cf in [PrevWord, NextWord]]
+
         
-        #
-        #  TENEMOS QUE AGREGAR LOS K FEATURES PARA NEXT Y PREV
-        #
-        
+        for i in range(1, n):
+             features += [NPrevTags(i)]
+        for f in [word_lower, prev_tags, word_istitle, word_isupper, word_isdigit]:
+            features += [PrevWord(f)]
         
         histories = self.sents_histories(tagged_sents)
-        n_prev_tags = NPrevTags(n)        
-        features = [word_lower, prev_tags, word_istitle, word_isupper, word_isdigit, n_prev_tags]
         vect = Vectorizer(features)
         
         self._pipeline = pipeline = Pipeline([
@@ -49,8 +50,12 @@ class MEMM:
 
         # 2. train it
         print('Training classifier...')
-        X = self.sents_histories(tagged_sents)
-        y = self.sents_tags(tagged_sents)
+        
+        tagged_sents_list = list(tagged_sents)
+        X = self.sents_histories( tagged_sents_list  )
+        y = self.sents_tags( tagged_sents_list  )
+#        X = self.sents_histories(tagged_sents)
+#        y = self.sents_tags(tagged_sents)
         pipeline.fit(list(X), list(y))
 
         # 3. build known words set
@@ -59,6 +64,7 @@ class MEMM:
         for sent in tagged_sents:
             for word, tag in sent:
                 self._known_words.add(word)
+                
 
     def sents_histories(self, tagged_sents):
         """
@@ -95,14 +101,12 @@ class MEMM:
     def sent_tags(self, tagged_sent):
         """
         Iterator over the tags of a tagged sentence.
-
         tagged_sent -- the tagged sentence (a list of pairs (word, tag)).
         """
         return (t for _, t in tagged_sent)
 
     def tag(self, sent):
         """Tag a sentence using beam inference with beam of size 1.
-
         sent -- the sentence.
         """
         # WORK HERE!!
@@ -118,7 +122,6 @@ class MEMM:
 
     def tag_history(self, h):
         """Tag a history.
-
         h -- the history.
         """
         # WORK HERE!!
@@ -126,7 +129,6 @@ class MEMM:
 
     def unknown(self, w):
         """Check if a word is unknown for the model.
-
         w -- the word.
         """
         # WORK HERE!!
