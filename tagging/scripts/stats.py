@@ -31,12 +31,7 @@ class POSStats:
         self.word_tags_dict = word_tags_dict = word_tags_dict = defaultdict(set)
         self.tag_words_dict = tag_words_dict = defaultdict(set)
         
-        self.count_sents = 0
-        
         for sent in tagged_sents:
-            
-            self.count_sents += 1
-            
             for word, tag in sent:
                 # contar la palabra:
                 words_dict[word] += 1 #Cuento repeticiones de palabras
@@ -47,7 +42,8 @@ class POSStats:
 
                 word_tags_dict[word].add(tag)
                 tag_words_dict[tag].add(word)
-                
+        
+        self.count_sents = len(tagged_sents)
         self.count_words = len(words_dict)  # Cantidad de palabras (word types)
         self.count_tags = count_tags = len(tags_dict)  # Cantidad de tags
 
@@ -67,7 +63,7 @@ class POSStats:
     def words(self):
         """Vocabulary (set of word types)."""
         # WORK HERE!!
-        return set(self.words_dict.values())
+        return set(self.words_dict.keys())
 
     def word_count(self):
         """Vocabulary size."""
@@ -82,7 +78,7 @@ class POSStats:
     def unambiguous_words(self):
         """List of words with only one observed POS tag."""
         # WORK HERE!!
-        return ambiguous_words(1)
+        return self.ambiguous_words(1)
 
     def ambiguous_words(self, n):
         """List of words with n different observed POS tags.
