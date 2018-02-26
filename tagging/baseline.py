@@ -46,14 +46,11 @@ class BaselineTagger:
         for sent in tagged_sents:
             for word, tag in sent:
                 word_tag_count_dict [word][tag] += 1
-                
+
         self.word_mostFrecTag_dict = word_mostFrecTag_dict = defaultdict(str)
         for word, tags in word_tag_count_dict.items():
             tag = max(tags.items(), key=lambda x: x[1])[0]
             word_mostFrecTag_dict[word] = tag
-            print('Word: ', word, ' - Tag: ', tag)
-        
-
 
     def tag(self, sent):
         """Tag a sentence.
