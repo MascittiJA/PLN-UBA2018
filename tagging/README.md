@@ -159,7 +159,10 @@ Ejercicio 4: Maximum Entropy Markov Models
 
 | N |Accuracy todas las palabras|Accuracy palabras conocidas|Accuracy palabras desconocidas|Tiempo de Entrenamiento|Tiempo de Evaluación|
 |:-:|:-------------------------:|:-------------------------:|:----------------------------:|:---------------------:|:------------------:|
-| 1 |          77.12 %          |          80.37 %          |           36.32 %            |         39,847s       |             |
+| 1 |          76.50 %          |          79.73 %          |           47.21 %            |         39,847s       |     54m 32,729s    |
+| 2 |          67.55 %          |          70.28 %          |           42.83 %            |         46,070s       |     57m 57,582s    |
+| 3 |        .  66.43 %          |        .  70.28 %          |        .   31.62 %            |         49,330s       |   .    19,969s      |
+| 4 |        .  63.52 %          |        .  66.92 %          |        .   32.77 %            |         49,330s       |   .    19,969s      |
 
 
 
