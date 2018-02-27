@@ -43,7 +43,6 @@ class BaselineTagger:
         # WORK HERE!!
         self.default_tag = default_tag
         
-
         self.word_tag_count_dict = word_tag_count_dict = defaultdict(inner_default_dict)
         
         for sent in tagged_sents:

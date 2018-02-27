@@ -130,3 +130,36 @@ También se implementaron los siguientes features paramétricos:
 * NPrevTags(n): la tupla de los últimos n tags.
 * PrevWord(f): Dado un feature f, aplicarlo sobre la palabra anterior en lugar de la actual.
 
+
+Ejercicio 4: Maximum Entropy Markov Models
+------------------------------------------
+
+#### Comparación de la Accuracy de los distintos modelos entrenados con MEMM, con su tiempo de evaluación y usando distintos clasificadores
+
+
+##### Clasificador *"Logistic Regression"*
+
+| N |Accuracy todas las palabras|Accuracy palabras conocidas|Accuracy palabras desconocidas|Tiempo de Entrenamiento|Tiempo de Evaluación|
+|:-:|:-------------------------:|:-------------------------:|:----------------------------:|:---------------------:|:------------------:|
+| 1 |          91.53 %          |          95.04 %          |           59.68 %            |       8m 12,811s      |       19,308s      |
+| 2 |          91.36 %          |          94.74 %          |           60.75 %            |      11m 3,149s       |       21,888s      |
+| 3 |          91.23 %          |          94.35 %          |           62.97 %            |      13m 4,572s       |       20,904s      |
+| 4 |          90.80 %          |          94.08 %          |           61.15 %            |      14m 8,047s       |       22,338s      |
+
+##### Clasificador *"Linear SVC"*
+
+| N |Accuracy todas las palabras|Accuracy palabras conocidas|Accuracy palabras desconocidas|Tiempo de Entrenamiento|Tiempo de Evaluación|
+|:-:|:-------------------------:|:-------------------------:|:----------------------------:|:---------------------:|:------------------:|
+| 1 |          93.76 %          |          97.51 %          |           59.82 %            |       5m 9,889s       |       19,969s      |
+| 2 |          93.90 %          |          97.45 %          |           61.78 %            |       5m 51,705s      |       20,179s      |
+| 3 |          94.24 %          |          97.48 %          |           64.92 %            |       5m 52,733s      |       21,402s      |
+| 4 |          93.87 %          |          97.22 %          |           62.47 %            |       7m 8,440s       |       21,878s      |
+
+##### Clasificador *"Multinomial NB"*
+
+| N |Accuracy todas las palabras|Accuracy palabras conocidas|Accuracy palabras desconocidas|Tiempo de Entrenamiento|Tiempo de Evaluación|
+|:-:|:-------------------------:|:-------------------------:|:----------------------------:|:---------------------:|:------------------:|
+| 1 |          77.12 %          |          80.37 %          |           36.32 %            |         39,847s       |             |
+
+
+
