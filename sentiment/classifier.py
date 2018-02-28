@@ -20,7 +20,7 @@ class SentimentClassifier(object):
         """
         self._clf = clf
         self._pipeline = pipeline = Pipeline([
-            ('vect', CountVectorizer()),
+            ('vect', CountVectorizer(binary=True)),
             ('clf', classifiers[clf]()),
         ])
 
