@@ -9,6 +9,7 @@ def print_maxent_features(vect, clf, n=5):
 	clf -- LogisticRegression classifier
 	n -- number of features to show
 	"""
+	print('Most relevant features for each class (logistic regression)')
 	C = clf.coef_
 	A = clf.coef_.argsort()
 	features = vect.get_feature_names()
@@ -29,8 +30,11 @@ def print_feature_weights_for_item(vect, clf, x):
 	vect -- text vectorizer (count or tf-idf)
 	clf -- LogisticRegression classifier
 	"""
+	print('Print active features and their weight for a specific item')
+	print('Tweet: ', x)
 	features = vect.get_feature_names()
 	x2 = vect.transform([x])
+	print('X2: ', x2)
 	col = x2.tocoo().col
 	for i in col:
 		print(features[i], clf.coef_[:,i])
