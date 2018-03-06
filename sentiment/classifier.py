@@ -22,16 +22,23 @@ class LemmaTokenizer(object):
     def tokenizador(self,x):
         tkn = TweetTokenizer()
         tokens = tkn.tokenize(x)
-#        return tokens
-        return self.negador(tokens)
+        tokens = self.remove_stopWords(tokens)
+        tokens = self.negate(tokens)
+        return tokens
     
-    def negador(self, tokens):
+    def remove_stopWords(self, tokens):
+        new_tokens = []
+        for token in tokens:
+            if token.lower() not in self.stop:
+                new_tokens.append(token)
+        return new_tokens
+            
+    
+    def negate(self, tokens):
         new_tokens = []
         negate = False
         i = 0
         for token in tokens:
-            if token.lower() in self.stop:
-                continue
             if token.lower() in ['no', 'tampoco', 'nunca', 'jamas']:
                 negate = True
                 i = 0
